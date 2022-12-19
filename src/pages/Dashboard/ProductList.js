@@ -1,13 +1,38 @@
 import React, { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../../features/products/productsSlice";
+import {
+  deleteProduct,
+  getProducts,
+  toggleDeleteSuccess,
+} from "../../features/products/productsSlice";
 
 const ProductList = () => {
-  const products = useSelector((state) => state.products.products);
+  // const products = useSelector((state) => state.products.products);
+  const { products, isDelete, isLoading } = useSelector(
+    (state) => state.products
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts());
   });
+
+  useEffect(() => {
+    if (!isLoading && isDelete) {
+      toast.success("successfully deleted product", { id: "productDelete" });
+      dispatch(toggleDeleteSuccess);
+    }
+  }, [isDelete, isLoading, dispatch]);
+
+  // if (isLoading) {
+  //   return <p>loading...</p>;
+  // }
+
+  // const loadingMsg = () => {
+  //   if (isLoading) {
+  //     toast.loading("deleting product...", { id: "productDelete" });
+  //   }
+  // };
 
   return (
     <div class="flex flex-col justify-center items-center h-full w-full ">
@@ -67,7 +92,7 @@ const ProductList = () => {
                   </td>
                   <td class="p-2">
                     <div class="flex justify-center">
-                      <button onClick={() => dispatch()}>
+                      <button onClick={() => dispatch(deleteProduct(_id))}>
                         <svg
                           class="w-8 h-8 hover:text-blue-600 rounded-full hover:bg-gray-100 p-1"
                           fill="none"

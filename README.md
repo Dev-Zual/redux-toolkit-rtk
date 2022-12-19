@@ -1,3 +1,3 @@
-## server
+## Project Details
 
-redux toolkit with rtk query project.
+redux toolkit with rtk query.
